@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+from utils.auth import login, logout
+from utils.logger import audit_log, log_info
+
+
 from db_functions import (
     connect_to_db,
     get_basic_info,
@@ -13,6 +17,8 @@ from db_functions import (
     get_pending_reorders,
     mark_reorder_as_completed,
 )
+
+
 
 # ---------------------------------------------------
 # Page Configuration
@@ -28,6 +34,22 @@ st.set_page_config(
 # ---------------------------------------------------
 db = connect_to_db()
 cursor = db.cursor(dictionary=True)
+
+
+
+
+# After DB connection
+if not login(cursor, db):
+    st.stop()
+
+st.sidebar.success(f"Logged in as: {st.session_state.username} ({st.session_state.role})")
+
+if st.sidebar.button("Logout"):
+    logout()
+    st.rerun()
+
+
+
 
 # ---------------------------------------------------
 # Sidebar Navigation
@@ -74,6 +96,10 @@ if option == "📊 Dashboard":
 # OPERATIONS SECTION
 # ===================================================
 elif option == "⚙️ Operations":
+    
+    if st.session_state.role != "Admin":
+        st.warning("You do not have permission to perform this action.")
+        st.stop()
 
     st.subheader("Operational Tasks")
 
@@ -128,6 +154,8 @@ elif option == "⚙️ Operations":
                                 supplier_dict[selected_supplier],
                             )
                         st.success("Product added successfully!")
+                        log_info(f"New product added: {p_name}")
+                        audit_log(cursor, db, f"Added product {p_name}", "current_user")
                     except Exception as e:
                         st.error(f"Error: {e}")
 
@@ -175,6 +203,8 @@ elif option == "⚙️ Operations":
                         reorder_qty
                     )
                 st.success("Reorder placed successfully!")
+                log_info(f"Reorder placed for product_id {product_dict[selected_product]}")
+                audit_log(cursor, db, "Placed reorder", st.session_state.role)
             except Exception as e:
                 st.error(f"Error: {e}")
 
