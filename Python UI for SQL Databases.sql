@@ -7,6 +7,24 @@ select * from suppliers
 drop table products
 
 
+CREATE INDEX idx_products_productid
+ON products(product_id);
+CREATE INDEX idx_products_supplierid
+ON products(supplier_id);
+CREATE INDEX idx_stockentries_productid
+ON stock_entries(product_id);
+CREATE INDEX idx_stockentries_entrydate
+ON stock_entries(entry_date);
+CREATE INDEX idx_stockentries_type_date
+ON stock_entries(change_type, entry_date);
+CREATE INDEX idx_reorders_product_status
+ON reorders(product_id, status);
+CREATE INDEX idx_shipments_productid
+ON shipments(product_id);
+CREATE INDEX idx_shipments_shipmentdate
+ON shipments(shipment_date);
+
+
 -- 1  Total Suppliers
 select count(*) as total_suppliers from suppliers
 
@@ -96,7 +114,7 @@ Begin
   values(new_shipment_id,new_prod_id,p_supplier,p_stock, curdate());
   
   
-  # make chnages in stock_entries
+  # make changes in stock_entries
   select max(entry_id)+1 into new_entry_id from stock_entries;
   insert  into stock_entries(entry_id , product_id , change_quantity , change_type , entry_date)
   values (new_entry_id,new_prod_id, p_stock, "Restock", curdate());

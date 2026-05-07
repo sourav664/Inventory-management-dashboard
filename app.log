@@ -6,3 +6,12 @@
 2026-03-03 14:17:59,709 - INFO - User admin64 logged in successfully.
 2026-03-03 14:26:53,208 - INFO - User admin64 logged in successfully.
 2026-03-05 11:55:40,947 - INFO - User admin logged in successfully.
+2026-03-05 12:41:14,349 - INFO - User admin logged in successfully.
+2026-03-05 12:41:33,169 - INFO - Reorder placed for product_id 13
+2026-05-05 23:41:38,871 - INFO - User admin logged in successfully.
+2026-05-05 23:47:04,163 - ERROR - Failed login attempt for user admin64.
+2026-05-05 23:47:47,537 - INFO - New user created: admin123 with role Manager
+2026-05-05 23:48:25,506 - INFO - User admin123 logged in successfully.
+2026-05-07 19:42:05,555 - INFO - User admin logged in successfully.
+2026-05-07 19:43:14,901 - INFO - New product added: Just Device
+2026-05-07 19:43:59,999 - INFO - Reorder placed for product_id 87
